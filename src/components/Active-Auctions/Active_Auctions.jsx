@@ -23,15 +23,28 @@ const Active_Auctions = () => {
 
     const newPrice = total + price;
     SetTotal(newPrice);
-    toast.success(`${product.title}  ! ✅`, {
-      position: "top-right",
-    });
+    toast.success(<div style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "left",
+      gap: "10px"
+    }}>
+      <img width={50} height={50} style={{
+        objectFit: "cover",
+        objectPosition: "center"
+      }} src={product.image} />
+      <span>{product.title}</span>
+    </div>, {
+      position: "top-right"
+    })
 
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+    localStorage.setItem("favorites", JSON.stringify([...favorites, product]));
   };
 
   const removeItemFromFavoriteItems = (id) => {
     const remainingFavorites = favorites.filter((item) => item.id !== id);
+    console.log(remainingFavorites)
+    SetTotal((total - remainingFavorites?.[0]?.currentBidPrice) || 0);
     localStorage.setItem("favorites", JSON.stringify(remainingFavorites))
     setFavorites(remainingFavorites);
   };
@@ -179,7 +192,7 @@ const Active_Auctions = () => {
               className="flex gap-5 justify-between mt-10 text-xl font-semibold px-6"
             >
               <h2>Total Bids Amount </h2>
-              <span>$$ {total}</span>
+              <span>$ {total}</span>
             </div>
           </div>
         </div>
